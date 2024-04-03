@@ -10,7 +10,7 @@ Welcome to Avax Gods, an innovative NFT card game deployed on the Avalanche Fuji
 
 - **Immersive Gameplay:** Assemble your deck of powerful cards and engage in strategic battles against other players or AI-controlled opponents. Each card possesses unique attributes and abilities, offering endless gameplay possibilities.
 
-- **Web3 Integration:** Seamlessly connect your core wallets through Web3Modal to manage your digital assets and participate in battles with ease.
+- **Web3 Integration:** Seamlessly connect your Core or any preferred Avalanche wallet to manage your digital assets and participate in battles with ease.
 
 - **Community-Driven Development:** Join a vibrant community of players and shape the future of Avax Gods through governance mechanisms and collaborative decision-making.
 
@@ -21,7 +21,7 @@ Welcome to Avax Gods, an innovative NFT card game deployed on the Avalanche Fuji
 To start your journey in Avax Gods:
 
 <!--1. Visit our [website](https://avaxgods.com) to create an account and download the game client.-->
-1. Connect your preferred Avalanche wallet through Web3Modal to access your NFT cards. 
+1. Connect your preferred Avalanche wallet to access your NFT cards. 
 2. Build your deck, challenge opponents, and conquer the battlefield to earn rewards and glory! 
 
 
