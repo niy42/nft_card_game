@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useGlobalContext } from '../context/js_index';
+import { useGlobalContext } from '../context/index';
 import { PageHOC, CustomInput, CustomBotton } from '../components';
 import { useNavigate } from 'react-router-dom';
 

@@ -4,7 +4,7 @@ import Web3Modal from 'web3modal';
 //import { useNavigate } from 'react-router-dom';
 
 import { contractABI, contractAddress } from '../contract';
-import { createEventListeners } from './createEventListeners';
+//import { createEventListeners } from './createEventListeners';
 
 const { ethereum } = window;
 const GlobalContext = createContext();
@@ -97,12 +97,12 @@ export const GlobalContextProvider = ({ children }) => {
 
     useEffect(() => {
         if(contract){
-            createEventListeners(
+            /*createEventListeners(
                 contract, 
                 provider, 
                 walletAddress, 
                 setShowAlert
-            );
+            );*/
 
         }
     }, [contract])
