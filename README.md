@@ -18,9 +18,10 @@ Welcome to Avax Gods, an innovative NFT card game deployed on the Avalanche Fuji
 
 To start your journey in Avax Gods:
 
-1. Visit our [website](https://avaxgods.com) to create an account and download the game client.
-2. Connect your preferred Avalanche wallet through Web3Modal to access your NFT cards.
-3. Build your deck, challenge opponents, and conquer the battlefield to earn rewards and glory!
+<!--1. Visit our [website](https://avaxgods.com) to create an account and download the game client.-->
+1. Connect your preferred Avalanche wallet through Web3Modal to access your NFT cards.
+2. Build your deck, challenge opponents, and conquer the battlefield to earn rewards and glory! 
+<img src=https://github.com/niy42/nft_card_game/blob/main/client/src/assets/avax_re.png width=50% height=50%/>
 
 ## Contributing
 
