@@ -20,7 +20,7 @@ const Home = () => {
 
   const handleClick = async () => {
     try {
-      console.log(contract);
+      console.log(walletAddress);
       const playerExists = await contract.isPlayer(walletAddress);
       if(!playerExists){
         await contract.registerPlayer(playerName, playerName);
@@ -50,13 +50,14 @@ const Home = () => {
       }
 
       console.log(playerExists);
-      console.log(playerToken);
+      console.log(playerTokenExists);
     }
     
-
-    if(contract){
-      checkForPlayerToken();
-    }
+    setTimeout(() => {
+      if(contract){
+        checkForPlayerToken();
+      }
+    }, 12000)
   }, [contract]);
 
   return (
