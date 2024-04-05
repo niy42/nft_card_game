@@ -289,13 +289,13 @@ body {
   overflow: hidden;
 }
 .dot1{
-  position: relative;
+  position: absolute;
   display: inline-block;
   left: -5px;
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 90%;
-  background-color:#7f46f0;
+  background-color:#ff4343;
   animation: load 2s cubic-bezier(.23,.7,.8,.3) infinite;
   /*animation-delay: 2s;*/
 }
@@ -304,27 +304,35 @@ body {
   0% { left:-15%; }
   100%{ left:115%; }
 }
+
 .mov {
-  animation-delay: .3s;
+  animation-delay: .2s;
   
 }
 
+/*.mov:nth-child(1) {
+  animation-delay: .2s;
+}*/
+
 .mov:nth-child(1) {
-  animation-delay: .15s;
+  animation-delay: .1s;
 }
 
 .mov:nth-child(2) {
-  animation-delay: .05s;
-  color: white;
+  animation-delay: 0s;
 }
 
-.mov:nth-child(5) {
-  animation-delay: -0.15s;
+.mov:nth-child(3) {
+  animation-delay: -0.1s;
 }
 
 .mov:nth-child(4) {
-  animation-delay: -0.3s
+  animation-delay: -0.2s;
 }
+
+/*.mov:nth-child(6) {
+  animation-delay: -0.2s;
+}*/
 
 /******** STYLES *********/
 body {

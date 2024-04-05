@@ -3,15 +3,18 @@ import { useGlobalContext } from '../context/index';
 import { PageHOC, CustomInput, CustomButton, Loader } from '../components'; // Import LoadingSpinner
 import { useNavigate } from 'react-router-dom';
 
+
 const Home = () => {
-  const { contract, walletAddress } = useGlobalContext();
+  const { contract, walletAddress, setShowAlert } = useGlobalContext();
   const [playerName, setPlayerName] = useState('');
   const [isLoading, setIsLoading] = useState(false); // Initialize loading state
+  const [loadingMessage, setLoadingMessage] = useState(''); // Initialize loading message state
   const navigate = useNavigate();
 
   const handleClick = async () => {
     try {
       setIsLoading(true); // Set loading state to true before async operation
+      setLoadingMessage('Registering player...'); // Set loading message
 
       console.log(walletAddress);
       const playerExists = await contract.isPlayer(walletAddress);
@@ -35,9 +38,22 @@ const Home = () => {
     }
   };
 
+  /*useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowAlert({
+        status: true,
+        type: 'info',
+        message: 'Battle ready ??'
+      });
+
+    }, 9000)
+    return () => clearTimeout(timeout);
+  }, []);*/
+
   useEffect(() => {
     const checkForPlayerToken = async () => {
       setIsLoading(true); // Set loading state to true before async operation
+      setLoadingMessage('Checking for player token...'); // Set loading message
 
       const playerExists = await contract.isPlayer(walletAddress);
       const playerTokenExists = await contract.isPlayerToken(walletAddress);
@@ -45,6 +61,11 @@ const Home = () => {
       if(playerExists && playerTokenExists){
         navigate('/create-battle');
       } else {
+        setShowAlert({
+          status: true,
+          type: 'failure',
+          message: 'Player not found!'
+        })
         setIsLoading(false); // Set loading state to false if navigation doesn't occur
       }
 
@@ -59,11 +80,11 @@ const Home = () => {
 
   return (
     <div className='flex flex-col'>
-      {isLoading && <Loader />} {/* Render Loader only when isLoading is true */}
+      {isLoading && <Loader message={loadingMessage} />} {/* Render LoadingSpinner only when isLoading is true */}
       {!isLoading && (
         <>
           <CustomInput
-          id="Name"
+            id="Name"
             label = "Name"
             placeholder = "Enter your player name"
             value={playerName}
@@ -75,12 +96,11 @@ const Home = () => {
             handleClick={handleClick}
             restStyles="mt-6"
           />
-      </>
+        </>
       )}
-      
     </div>
   );
-}
+};
 
 export default PageHOC(
   Home,

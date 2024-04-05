@@ -80,18 +80,6 @@ export const GlobalContextProvider = ({ children }) => {
         return () => clearTimeout(timeout);
     }, []);
     
-    
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            setShowAlert({
-                status: true,
-                type: 'info',
-                message: "Welcome to the Ultimate Battle Game..."
-            });
-        }, 7000);
-
-        return () => clearTimeout(timeout);
-    }, []);
         
 
     // Set the contract and provider to the state
