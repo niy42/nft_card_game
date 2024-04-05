@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { ethers } from 'ethers';
 import Web3Modal from 'web3modal';
-//import { useNavigate } from 'react-router-dom';
-import Alert from '../components/Alert.jsx';
+import { useNavigate } from 'react-router-dom';
+
 import { contractABI, contractAddress } from '../contract/index.js';
-//import { createEventListeners } from './createEventListeners';
+import { createEventListeners } from './createEventListeners.js';
 const { ethereum } = window;
 const GlobalContext = createContext();
 
@@ -14,7 +14,7 @@ export const GlobalContextProvider = ({ children }) => {
     const [contract, setContract] = useState(null);
     const [showAlert, setShowAlert] = useState({ status: false, type: 'info', message: ''});
 
-    
+    const navigate = useNavigate();
 
      /*const updateCurrentWalletAddress = async () => {
         try {
@@ -80,29 +80,16 @@ export const GlobalContextProvider = ({ children }) => {
     
     
     useEffect(() => {
-        const message = () => {
-            try {
-                setShowAlert({
-                    status: true,
-                    type: 'info',
-                    message: 'Almost there... Brave men don\'t quit'
-                })
-                if(showAlert?.status) showAlert?.status 
-                && <Alert type={showAlert.type} message={showAlert.message}/>      
-
-        } catch (error) {
-                console.error(error);
-            }
-        }
-        
         const timeout = setTimeout(() => {
-            message();
+            setShowAlert({
+                status: true,
+                type: 'info',
+                message: "Almost there... Brave men don't quit"
+            });
         }, 15000);
 
         return () => clearTimeout(timeout);
     }, []);
-        
-        
         
 
     // Set the contract and provider to the state
@@ -122,7 +109,6 @@ export const GlobalContextProvider = ({ children }) => {
                         const newContract = new Contract(contractAddress, contractABI, signer);
                         console.log("New contract instance:", newContract);
 
-                       
                         setProvider(newProvider);
                         setContract(newContract);
                         resolve(connection);
@@ -146,17 +132,17 @@ export const GlobalContextProvider = ({ children }) => {
 
 
 
-    /*useEffect(() => {
+    useEffect(() => {
         if(contract){
-            /*createEventListeners(
+            createEventListeners({
+                navigate,
                 contract, 
                 provider, 
                 walletAddress, 
                 setShowAlert
-            );
-
+            });
         }
-    }, [contract])*/
+    }, [contract])
 
 
    useEffect(() => {

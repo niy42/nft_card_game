@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { logo, heroImg } from '../assets'
 import styles from '../styles'
 
-import { useGlobalContext } from '../context/index'
+import { useGlobalContext } from '../context'
 import Alert from './Alert';
 
 const PageHOC = (Component, title, description) => () => {

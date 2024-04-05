@@ -36,7 +36,8 @@ const Home = () => {
         type: 'failure',
         message: "something went wrong!"
       })
-      alert(error);
+      console.log(error);
+      //alert(error);
     }
   }
 
@@ -57,7 +58,7 @@ const Home = () => {
       if(contract){
         checkForPlayerToken();
       }
-    }, 12000)
+    }, 1000)
   }, [contract]);
 
   return (
