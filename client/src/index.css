@@ -277,3 +277,56 @@ body {
     transform: rotate(45deg) scale(0.25) translateZ(0);
   }
 }
+
+
+.container{
+  position: relative;
+  width: 300px;
+  height: 200px;
+  border: 1px solid #999;
+  margin: 20px auto;
+  padding: 8px 0px;
+  overflow: hidden;
+}
+.dot1{
+  position: relative;
+  display: inline-block;
+  left: -5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 90%;
+  background-color:#7f46f0;
+  animation: load 2s cubic-bezier(.23,.7,.8,.3) infinite;
+  /*animation-delay: 2s;*/
+}
+
+@keyframes load{
+  0% { left:-15%; }
+  100%{ left:115%; }
+}
+.mov {
+  animation-delay: .3s;
+  
+}
+
+.mov:nth-child(1) {
+  animation-delay: .15s;
+}
+
+.mov:nth-child(2) {
+  animation-delay: .05s;
+  color: white;
+}
+
+.mov:nth-child(5) {
+  animation-delay: -0.15s;
+}
+
+.mov:nth-child(4) {
+  animation-delay: -0.3s
+}
+
+/******** STYLES *********/
+body {
+  background-color: #ededed;   
+}

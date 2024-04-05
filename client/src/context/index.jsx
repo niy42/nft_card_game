@@ -9,10 +9,12 @@ const { ethereum } = window;
 const GlobalContext = createContext();
 
 export const GlobalContextProvider = ({ children }) => {
-    const [walletAddress, setWalletAddress] = useState("");
+    const [walletAddress, setWalletAddress] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [provider, setProvider] = useState(null);
     const [contract, setContract] = useState(null);
     const [showAlert, setShowAlert] = useState({ status: false, type: 'info', message: ''});
+    const [battleName, setBattleName] = useState('');
 
     const navigate = useNavigate();
 
@@ -73,7 +75,7 @@ export const GlobalContextProvider = ({ children }) => {
 
         const timeout = setTimeout(() => {
             waitForWalletConnection();
-        }, 3000);
+        }, 10000);
         
         return () => clearTimeout(timeout);
     }, []);
@@ -84,9 +86,9 @@ export const GlobalContextProvider = ({ children }) => {
             setShowAlert({
                 status: true,
                 type: 'info',
-                message: "Almost there... Brave men don't quit"
+                message: "Welcome to the Ultimate Battle Game..."
             });
-        }, 15000);
+        }, 7000);
 
         return () => clearTimeout(timeout);
     }, []);
@@ -125,7 +127,7 @@ export const GlobalContextProvider = ({ children }) => {
        
         const timeout = setTimeout(() => {
             setSmartContractandProvider();
-        }, 20000) 
+        }, 0) 
 
         return () => clearTimeout(timeout);
     }, []);
@@ -164,6 +166,9 @@ export const GlobalContextProvider = ({ children }) => {
             walletAddress,
             showAlert,
             setShowAlert,
+            battleName,
+            setBattleName,
+            setIsLoading,
             }} >
             {children}
         </GlobalContext.Provider>

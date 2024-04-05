@@ -3,6 +3,7 @@ const styles = {
   headText: 'font-rajdhani font-bold text-white sm:text-6xl text-4xl',
   normalText: 'font-rajdhani font-normal text-[24px] text-siteWhite',
   footerText: 'font-medium text-base text-white',
+  loadingText: 'font-small text-xl text-white',
   infoText: 'font-rajdhani font-medium text-lg text-siteViolet cursor-pointer',
 
   // glassmorphism
@@ -89,6 +90,7 @@ const styles = {
 
   // modal
   modalText: 'font-rajdhani font-bold text-3xl text-white mb-6 text-center',
+  
 };
 
 export default styles;

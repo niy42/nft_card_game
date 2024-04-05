@@ -1,11 +1,13 @@
 import PageHOC from "./PageHOC";
 import CustomInput from "./CustomInput";
-import CustomBotton from "./CustomBotton";
+import CustomButton from "./CustomButton";
 import Alert from "./Alert";
+import Loader from "./LoadingSpinner";
 
 export {
     PageHOC,
     CustomInput,
-    CustomBotton,
+    CustomButton,
     Alert,
+    Loader,
 }

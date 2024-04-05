@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from '../styles'
 
-const CustomBotton = ({ title, handleClick, restStyles }) => {
+const CustomButton = ({ title, handleClick, restStyles }) => {
   return(
     <button
       type="button"
@@ -9,9 +9,9 @@ const CustomBotton = ({ title, handleClick, restStyles }) => {
       onClick={handleClick}
       title={title}
     > 
-      Register
+      {title}
     </button>
   );
 }
 
-export default CustomBotton
+export default CustomButton
