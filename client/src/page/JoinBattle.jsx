@@ -6,11 +6,15 @@ import { useGlobalContext } from '../context'
 import styles  from '../styles'
 
 const JoinBattle = () => {
+  const navigate = useNavigate()
   return (
-    <div>
-      Join Battle
-    </div>
-  )
+    <>
+      <h2 className={styles.joinHeadText}>
+        Available Battles
+      </h2>
+      <p className={styles.infoText} onClick={() => navigate('/create-battle')}>OR create a new battle</p>
+    </>
+  );
 }
 
 export default PageHOC(

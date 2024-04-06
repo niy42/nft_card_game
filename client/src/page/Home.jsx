@@ -14,7 +14,7 @@ const Home = () => {
   const handleClick = async () => {
     try {
       setIsLoading(true); // Set loading state to true before async operation
-      setLoadingMessage('Registering player...'); // Set loading message
+      setLoadingMessage('Registering player . . .'); // Set loading message
 
       console.log(walletAddress);
       const playerExists = await contract.isPlayer(walletAddress);
@@ -30,7 +30,7 @@ const Home = () => {
       setShowAlert({
         status: true,
         type: 'failure',
-        message: "something went wrong!"
+        message: "Oops! something went wrong!"
       });
       console.log(error);
     } finally {
@@ -53,7 +53,7 @@ const Home = () => {
   useEffect(() => {
     const checkForPlayerToken = async () => {
       setIsLoading(true); // Set loading state to true before async operation
-      setLoadingMessage('Checking for player token...'); // Set loading message
+      setLoadingMessage('Checking for player token . . .'); // Set loading message
 
       const playerExists = await contract.isPlayer(walletAddress);
       const playerTokenExists = await contract.isPlayerToken(walletAddress);
@@ -64,23 +64,25 @@ const Home = () => {
         setShowAlert({
           status: true,
           type: 'failure',
-          message: 'Player not found!'
+          message: 'Please register player!'
         })
         setIsLoading(false); // Set loading state to false if navigation doesn't occur
       }
-
-      console.log(playerExists);
-      console.log(playerTokenExists);
-    };
+      
+      console.log({
+        playerExists,
+        playerTokenExists
+    });
+  };
     
     if(contract){
       checkForPlayerToken();
     }
-  }, [contract, navigate, walletAddress]);
+}, [contract, navigate, walletAddress]);
 
   return (
     <div className='flex flex-col'>
-      {isLoading && <Loader message={loadingMessage} />} {/* Render LoadingSpinner only when isLoading is true */}
+      {isLoading && <Loader message={loadingMessage} />} {/* Render Loader only when isLoading is true */}
       {!isLoading && (
         <>
           <CustomInput
