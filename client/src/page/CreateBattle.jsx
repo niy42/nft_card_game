@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GameLoad, CustomButton, CustomInput, PageHOC } from '../components';
 import { useNavigate } from 'react-router-dom';
+import { Loader } from '../components'
 
 import styles from '../styles';
 import { useGlobalContext } from '../context';
@@ -9,45 +10,61 @@ import { useGlobalContext } from '../context';
 const CreateBattle = () => {
   const { contract, battleName, setBattleName, setShowAlert } = useGlobalContext();
   const [waitBattle, setWaitBattle] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('');
   
   const navigate = useNavigate();
   const handleClick = async () => {
     if(!battleName || !battleName.trim()) return null
 
-    const battleNameExists = await contract.isBattle(battleName);
-    if(battleNameExists === true ){
-      setShowAlert({
-        status: true,
-        type: 'failure',
-        message: 'Battle Already exist!'
-      })
-    }
+    setLoading(true)
+    setLoadingMessage('Creating your Battle');
 
     try {
-      await contract.createBattle(battleName);
-      setWaitBattle(true);
+      const battleNameExists = await contract.isBattle(battleName);
+      if(battleNameExists === true ){
+        setShowAlert({
+          status: true,
+          type: 'failure',
+          message: 'Battle Already exist!'
+        })
+        setLoading(false);
+      }
+      
+      const createBattle = await contract.createBattle(battleName);
+      if(createBattle){
+        setWaitBattle(true);
+      } else {
+        setLoading(true);
+      }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <>{waitBattle && <GameLoad />}
+    <>{loading && <Loader message={loadingMessage}/>}
+      {waitBattle && <GameLoad />}
       <div className='flex flex-col mb-5'>
-        <CustomInput 
-          id='name'
-          label='name'
-          placeholder='Enter battle name'
-          value={battleName}
-          autocompleteValue='on'
-          handleValueChange={setBattleName}
-          
-          />
-        <CustomButton 
-          title='Create Battle'
-          handleClick={handleClick}
-          restStyles='mt-6'
-        />
+        {!loading && (
+          <>
+            <CustomInput 
+            id='name'
+            label='name'
+            placeholder='Enter battle name'
+            value={battleName}
+            autocompleteValue='on'
+            handleValueChange={setBattleName}
+            />
+          <CustomButton 
+            title='Create Battle'
+            handleClick={handleClick}
+            restStyles='mt-6'/>
+
+          </>
+        )}
         <p className={styles.infoText} onClick={() => navigate('/join-battle')}>or join an existing Battle</p>
       </div>
     </>
