@@ -24,10 +24,18 @@ const CreateBattle = () => {
   const navigate = useNavigate();
 console.log('This is gameData', + ' ' + gameData?.activeBattle?.battleStatus === 0);
   useEffect(() => {
-    setLoading(true);
-    setLoadingMessage('Fetching Data . . .');
-    if(gameData?.activeBattle?.battleStatus === 0){
-      setWaitBattle(true);
+      
+    try {
+      setLoading(true);
+      setLoadingMessage('Checking . . .');
+      if(gameData?.activeBattle?.battleStatus === 0){
+        setWaitBattle(true);
+        setLoading(false);
+      }
+           
+    } catch (error) {
+      console.error(error);
+      setError(true);
     }
   }, [gameData]);
 

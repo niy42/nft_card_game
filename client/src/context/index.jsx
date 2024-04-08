@@ -130,8 +130,8 @@ export const GlobalContextProvider = ({ children }) => {
                 setShowAlert,
                 setUpdateGameData,
             });
-        }
-    }, [contract])
+        } 
+    }, [contract, walletAddress])
 
 
    useEffect(() => {
@@ -175,7 +175,7 @@ export const GlobalContextProvider = ({ children }) => {
 
     fetchGameData();
         
-   }, [contract, walletAddress]);
+   }, [contract, walletAddress, updateGameData]);
 
    /*useEffect(() => {
     const fetchGameData = async () => {

@@ -38,7 +38,7 @@ const GameLoad = () => {
           <h2 className={styles.gameLoadVS}>Vs</h2>
 
           <div className={`${styles.flexCenter} flex-col`}>
-            <img src={player01} className={styles.gameLoadPlayerImg}/>
+            <img src={player02} className={styles.gameLoadPlayerImg}/>
              <p className={styles.gameLoadPlayerText}>??????????????????</p>
           </div>
 

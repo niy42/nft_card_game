@@ -22,6 +22,7 @@ const JoinBattle = () => {
         type: 'success',
         message: `Joining ${battleName}`
       })
+      //navigate(`/battle/${battleName}`);
     } catch (error) {
       console.error(error);
     }
