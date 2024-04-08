@@ -13,7 +13,7 @@ const AddNewEvent = (eventFilter, provider, cb) => {
 }
 
 
-export const createEventListeners = ({ navigate, contract, provider, walletAddress, setShowAlert }) => {
+export const createEventListeners = ({ navigate, contract, provider, walletAddress, setShowAlert,setUpdateGameData }) => {
     if(contract && contract.filters){
          const  NewPlayerEventFilter = contract.filters.NewPlayer();
               
@@ -27,6 +27,19 @@ export const createEventListeners = ({ navigate, contract, provider, walletAddre
                 message: 'Player has been successfully registered'})
             }
         })
+
+        const  NewBattleEventFilter = contract.filters.NewBattle();
+        AddNewEvent(NewBattleEventFilter, provider, ({ args }) => {
+            console.log('New battle started!', args, walletAddress);
+
+            if(walletAddress.toLowerCase() === args.player1.toLowerCase() || walletAddress.toLowerCase() === args.player2.toLowerCase()){
+                navigate(`/battle/${args.battleName}`);
+            }
+
+            setUpdateGameData((prevUpdateGameData) => prevUpdateGameData + 1);
+            
+        });
+
     } else {
         console.log("Object doesn't exists");
     }

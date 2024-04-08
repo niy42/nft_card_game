@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GameLoad, CustomButton, CustomInput, PageHOC } from '../components';
 import { useNavigate } from 'react-router-dom';
 import { Loader } from '../components'
@@ -8,12 +8,30 @@ import { useGlobalContext } from '../context';
 
 
 const CreateBattle = () => {
-  const { contract, battleName, setBattleName, setShowAlert } = useGlobalContext();
+  const { 
+    contract, 
+    battleName, 
+    setBattleName,
+    setShowAlert,
+    gameData,
+    walletAddress,
+  } = useGlobalContext();
+
   const [waitBattle, setWaitBattle] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
   
   const navigate = useNavigate();
+console.log('This is gameData', + ' ' + gameData?.activeBattle?.battleStatus === 0);
+  useEffect(() => {
+    setLoading(true);
+    setLoadingMessage('Fetching Data . . .');
+    if(gameData?.activeBattle?.battleStatus === 0){
+      setWaitBattle(true);
+    }
+  }, [gameData]);
+
+
   const handleClick = async () => {
     if(!battleName || !battleName.trim()) return null
 

@@ -15,9 +15,12 @@ export const GlobalContextProvider = ({ children }) => {
     const [contract, setContract] = useState(null);
     const [showAlert, setShowAlert] = useState({ status: false, type: 'info', message: ''});
     const [battleName, setBattleName] = useState('');
-
+    const [gameData, setGameData] = useState({
+        players: [], pendingBattles: [], activeBattle: null
+    });
+    const [updateGameData, setUpdateGameData] = useState(0);
     const navigate = useNavigate();
-
+    const [battleGround, setBattleGround] = useState('bg-astral');
      /*const updateCurrentWalletAddress = async () => {
         try {
             if(!ethereum) return alert('Please install wallet');
@@ -57,10 +60,6 @@ export const GlobalContextProvider = ({ children }) => {
     );
 
 
-
-
-
-
     useEffect(() => {
         const waitForWalletConnection = async () => {
             let timeout;
@@ -81,7 +80,6 @@ export const GlobalContextProvider = ({ children }) => {
     }, []);
     
         
-
     // Set the contract and provider to the state
     useEffect(() => {
         const setSmartContractandProvider = () => new Promise((resolve, reject) => {
@@ -121,15 +119,16 @@ export const GlobalContextProvider = ({ children }) => {
     }, []);
 
 
-
     useEffect(() => {
         if(contract){
             createEventListeners({
                 navigate,
+                battleName,
                 contract, 
                 provider, 
                 walletAddress, 
-                setShowAlert
+                setShowAlert,
+                setUpdateGameData,
             });
         }
     }, [contract])
@@ -148,6 +147,65 @@ export const GlobalContextProvider = ({ children }) => {
    }, [showAlert]);
 
 
+  useEffect(() => {
+    const fetchGameData = async () => {
+        if(!contract || !walletAddress) return;
+        try {
+            const fetchedBattles = await contract.getAllBattles();
+            console.log('Fetched Battles: ', fetchedBattles);
+
+            const pendingBattles = fetchedBattles.filter((battle) => battle.battleStatus == 0);
+            console.log('Pending Battles: ', pendingBattles);
+
+            let activeBattle = null;
+            fetchedBattles.forEach((battle) => {
+                if(battle.players.find((player) => player.toLowerCase() === walletAddress.toLowerCase())){
+                    if(battle.winner.startsWith('0x00')){
+                        activeBattle = battle;
+                    }
+                }
+            }) ;
+            console.log('Player address: ', activeBattle);
+
+            setGameData({ pendingBattles: pendingBattles.slice(1), activeBattle })
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    fetchGameData();
+        
+   }, [contract, walletAddress]);
+
+   /*useEffect(() => {
+    const fetchGameData = async () => {
+        if (!contract) return; //Ensure contract is initialized
+        try {
+            const fetchedBattles = await contract.getAllBattles();
+            console.log("Fetched Battles: ", fetchedBattles);
+
+            const pendingBattles = fetchedBattles.filter((battle) => battle.battleStatus === 0);
+            console.log("Pending Battles: ", pendingBattles);
+
+            let activeBattle = null;
+            for (const battle of fetchedBattles) {
+                if (battle.players.find((player) => player.toLowerCase() === walletAddress.toLowerCase()) &&
+                    battle.winner.startsWith('0x00')) {
+                    activeBattle = battle;
+                    break; // Found active battle, exit loop
+                }
+            }
+
+            setGameData({ pendingBattles: pendingBattles.slice(1), activeBattle });
+        } catch (error) {
+            console.error("Error fetching game data:", error);
+        }
+    };
+
+    fetchGameData();
+}, [contract, updateGameData]);*/
+
+
     return (
         <GlobalContext.Provider value={{ 
             contract,
@@ -157,6 +215,11 @@ export const GlobalContextProvider = ({ children }) => {
             battleName,
             setBattleName,
             setIsLoading,
+            gameData,
+            battleGround,
+            setBattleGround,
+
+            
             }} >
             {children}
         </GlobalContext.Provider>

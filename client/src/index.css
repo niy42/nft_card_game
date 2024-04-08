@@ -338,3 +338,10 @@ body {
 body {
   background-color: #ededed;   
 }
+
+.scrollable-content {
+  overflow: auto; /* or overflow: scroll; */
+  /* Optionally, you can set a maximum height or width to limit scrolling*/ 
+  max-height: 500px; /* Example max height*/
+}
+

@@ -25,6 +25,7 @@ const Home = () => {
           type: 'info',
           message: `${playerName} is being summoned!`
         });
+        navigate('/create-battle');
       }
     } catch (error) {
       setShowAlert({
