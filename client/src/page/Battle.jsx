@@ -67,7 +67,7 @@ const Battle = () => {
 
         <div className='flex items-center flex-row'>
           <ActionButton 
-            imgurl={attack}
+            imgUrl={attack}
             handleClick={() => {}}
             restStyles="mr-2 hover:border-yellow-400"
           />
@@ -78,7 +78,7 @@ const Battle = () => {
             restStyles='mt-3'
           />
           <ActionButton 
-            imgurl={attack}
+            imgUrl={defense}
             handleClick={() => {}}
             restStyles="ml-6 hover:border-red-600"
           />

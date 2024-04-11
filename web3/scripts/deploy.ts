@@ -24,7 +24,5 @@ main()
     console.error(error);
     process.exit(1);
   });
-function async(arg0: Promise<string>) {
-  throw new Error('Function not implemented.');
-}
 
+  
