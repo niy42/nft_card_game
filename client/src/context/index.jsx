@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { contractABI, contractAddress } from '../contract/index.js';
 import { createEventListeners } from './createEventListeners.js';
+import { GetParams } from '../utils/onboard';
+import { player01 } from '../assets/index.js';
+
 const { ethereum } = window;
 const GlobalContext = createContext();
 
@@ -21,7 +24,37 @@ export const GlobalContextProvider = ({ children }) => {
     const [updateGameData, setUpdateGameData] = useState(0);
     const navigate = useNavigate();
     const [battleGround, setBattleGround] = useState('bg-astral');
-     /*const updateCurrentWalletAddress = async () => {
+    const [step, setStep] = useState(1);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const player1Ref = useRef();
+    const player2Ref = useRef();
+    
+    useEffect(() => {
+        const battleGroundFromLocalStorage = localStorage.getItem('battleground');
+        if(battleGroundFromLocalStorage) {
+            setBattleGround(battleGroundFromLocalStorage)
+        } else {
+            localStorage.setItem('battleground', battleGround);
+        }
+    }, []);
+    
+    // Reset web3 onboarding modal params
+    useEffect(() => {
+        const resetParams = async () => {
+            const currentStep = await GetParams();
+
+            setStep(currentStep.step);
+        }
+
+        resetParams();
+
+        window?.ethereum.on('chainChanged', () =>  resetParams());
+        window?.ethereum.on('accountsChanged', () =>  resetParams());
+    }, []);
+    
+    
+    /*const updateCurrentWalletAddress = async () => {
         try {
             if(!ethereum) return alert('Please install wallet');
             const accounts = await window?.ethereum?.request({ method: "eth_requestAccounts" });
@@ -33,7 +66,6 @@ export const GlobalContextProvider = ({ children }) => {
             console.error(error);
         }
     };*/
-
 
 
     // Set the wallet address to the state
@@ -120,7 +152,7 @@ export const GlobalContextProvider = ({ children }) => {
 
 
     useEffect(() => {
-        if(contract){
+        if(step !== -1 && contract){
             createEventListeners({
                 navigate,
                 battleName,
@@ -131,7 +163,7 @@ export const GlobalContextProvider = ({ children }) => {
                 setUpdateGameData,
             });
         } 
-    }, [contract, walletAddress])
+    }, [contract, walletAddress, step])
 
 
    useEffect(() => {
@@ -218,8 +250,9 @@ export const GlobalContextProvider = ({ children }) => {
             gameData,
             battleGround,
             setBattleGround,
-
-            
+            player1Ref,
+            player2Ref,
+            setErrorMessage
             }} >
             {children}
         </GlobalContext.Provider>

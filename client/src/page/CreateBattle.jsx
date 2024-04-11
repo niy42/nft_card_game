@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GameLoad, CustomButton, CustomInput, PageHOC } from '../components';
 import { useNavigate } from 'react-router-dom';
-import { Loader } from '../components'
+import { Loader } from '../components';
 
 import styles from '../styles';
 import { useGlobalContext } from '../context';
@@ -28,7 +28,9 @@ console.log('This is gameData', + ' ' + gameData?.activeBattle?.battleStatus ===
     try {
       setLoading(true);
       setLoadingMessage('Checking . . .');
-      if(gameData?.activeBattle?.battleStatus === 0){
+      if(gameData?.activeBattle?.battleStatus === 1){
+        navigate(`/battle/${gameData?.activeBattle?.name}`)
+      } else if (gameData?.activeBattle?.battleStatus === 0){
         setWaitBattle(true);
         setLoading(false);
       }

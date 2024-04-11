@@ -40,6 +40,9 @@ export const createEventListeners = ({ navigate, contract, provider, walletAddre
             
         });
 
+
+        //const Battle
+
     } else {
         console.log("Object doesn't exists");
     }

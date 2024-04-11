@@ -15,7 +15,7 @@ const Card = ({ card, title, restSytles, cardRef, playerTwo }) => {
   return (
     <Tilt>
 
-      <div  className={`${styles.cardContainer} ${restSytles}`}>
+      <div ref={cardRef} className={`${styles.cardContainer} ${restSytles}`}>
         <img src={playerTwo ? img2 : img1} alt='card' className={styles.cardImg} />
         
         <div className={`${styles.cardPointContainer} sm:left-[21.2%] left-[22%] ${styles.flexCenter}`}>
@@ -23,7 +23,7 @@ const Card = ({ card, title, restSytles, cardRef, playerTwo }) => {
         </div>
 
         <div className={`${styles.cardPointContainer} sm:right-[14.2%] right-[15%] ${styles.flexCenter}`}>
-          <p className={`${styles.cardPoint} text-red-800`}>{card.att}</p>
+          <p className={`${styles.cardPoint} text-red-800`}>{card.def}</p>
         </div>
 
         <div className={`${styles.cardTextContainer} ${styles.flexCenter}`}><p className={styles.cardText}>{title}</p></div>
