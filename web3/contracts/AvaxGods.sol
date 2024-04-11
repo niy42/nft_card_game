@@ -13,7 +13,7 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 /// @author Julian Martinez
 /// @author Gabriel Cardona
 /// @author Raj Ranjan
-/// @author Obanla Adeniyi
+/// @author Obanla Adeniyi (niy42)
 
 contract AVAXGods is ERC1155, Ownable(msg.sender), ERC1155Supply {
     string public baseURI; // baseURI where token metadata is stored
