@@ -27,11 +27,18 @@ To start your journey in Avax Gods:
 
 ## Contributing
 
-We welcome contributions from developers, designers, and enthusiasts to help improve Avax Gods and expand its features. Whether it's suggesting new card ideas, proposing gameplay mechanics, or contributing code, your input is valued and appreciated.
+I specially welcome contributions from developers, designers, and enthusiasts to help improve Avax Gods and expand its features. Whether it's suggesting new card ideas, proposing gameplay mechanics, or contributing code, your input is valued and appreciated.
 
-If you're interested in contributing, please check out our [GitHub repository](https://github.com/AvaxGods) for more information.
+If you're interested in contributing, please check out our [Avax gods](https://github.com/niy42/nft_card_game) for more information.
 
-## Connect With Us
+
+## Tech Stack
+
+- **Framework:** React, NodeJS
+- **Styling:** Vanilla CSS, Tailwind
+- **Programming Language:** Solidity, TypeScript, Javascript
+
+<!--## Connect With Us
 
 Stay up-to-date with the latest news, updates, and community events by following us on social media:
 
@@ -39,7 +46,7 @@ Stay up-to-date with the latest news, updates, and community events by following
 - Discord: [Avax Gods Community](https://discord.gg/AvaxGods)
 - Telegram: [Avax Gods Official](https://t.me/AvaxGodsOfficial)
 
-Join our community, engage with fellow players, and embark on an unforgettable journey in Avax Gods!
+Join our community, engage with fellow players, and embark on an unforgettable journey in Avax Gods!-->
 
 ## License
 
