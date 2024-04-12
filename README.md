@@ -2,7 +2,7 @@
 
 ![Avalanche Logo](https://github.com/niy42/nft_card_game/blob/main/client/src/assets/avax_gods.png)
 
-Welcome to Avax Gods, an innovative NFT card game deployed on the Avalanche Fuji C-Chain! Dive into a world where mythical gods, heroes, and monsters clash in epic battles for supremacy. With Avax Gods, you can collect, trade, and battle with unique NFT cards representing legendary beings from various mythologies.
+Welcome to Avax Gods, an innovative NFT online multiplayer card game deployed on the Avalanche Fuji C-Chain! Dive into a world where mythical gods, heroes, and monsters clash in epic battles for supremacy. With Avax Gods, you can collect, trade, and battle with unique NFT cards representing legendary beings from various mythologies.
 
 ## Features
 
