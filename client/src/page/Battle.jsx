@@ -68,10 +68,23 @@ const Battle = () => {
         type: 'info',
         message: `Initiating ${choice === 1 ? 'attack' : 'defense'}`,
       });
+
       } catch (error) {
-        console.error(error);
+        console.log(error);
+        setErrorMessage(error);
+        
       }
     }
+
+
+    useEffect(() => {
+      const timeout = setTimeout(() => {
+        if(!gameData?.activeBattle) navigate('/');
+      }, 2000);
+      return () => {
+        clearTimeout(timeout);
+      };
+    }, []);
 
   return (
     <div className={`${styles.flexBetween} ${styles.gameContainer} ${battleGround}`}>

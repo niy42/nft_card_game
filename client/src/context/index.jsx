@@ -4,7 +4,7 @@ import Web3Modal from 'web3modal';
 import { useNavigate } from 'react-router-dom';
 
 import { contractABI, contractAddress } from '../contract/index.js';
-import { createEventListeners } from './createEventListeners.js';
+import { createEventListeners } from './createEventListeners';
 import { GetParams } from '../utils/onboard';
 import { player01 } from '../assets/index.js';
 
@@ -15,7 +15,7 @@ export const GlobalContextProvider = ({ children }) => {
     const [walletAddress, setWalletAddress] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [provider, setProvider] = useState(null);
-    const [contract, setContract] = useState(null);
+    const [contract, setContract] = useState('');
     const [showAlert, setShowAlert] = useState({ status: false, type: 'info', message: ''});
     const [battleName, setBattleName] = useState('');
     const [gameData, setGameData] = useState({
@@ -152,17 +152,18 @@ export const GlobalContextProvider = ({ children }) => {
 
 
     useEffect(() => {
-        if(step !== -1 && contract){
-            createEventListeners({
-                navigate,
-                battleName,
-                contract, 
-                provider, 
-                walletAddress, 
-                setShowAlert,
-                setUpdateGameData,
-            });
-        } 
+        if(!contract && step === -1) return;
+        createEventListeners({
+            navigate,
+            battleName,
+            contract, 
+            provider, 
+            walletAddress, 
+            setShowAlert,
+            player1Ref,
+            player2Ref,
+            setUpdateGameData,
+        });
     }, [contract, walletAddress, step])
 
 
@@ -179,7 +180,22 @@ export const GlobalContextProvider = ({ children }) => {
    }, [showAlert]);
 
 
-  useEffect(() => {
+   'exection reverted: this is an error message'
+   useEffect(() => {
+        if(errorMessage){
+            const parsedErrorMessage = errorMessage?.reason?.slice('execution reverted: '.length).slice(0, -1);
+            if(parsedErrorMessage){
+                setShowAlert({
+                    status: true,
+                    type: 'failure',
+                    message: parsedErrorMessage
+                })
+            }; 
+        }
+   }, [errorMessage]);
+   
+   
+   useEffect(() => {
     const fetchGameData = async () => {
         if(!contract || !walletAddress) return;
         try {
@@ -199,7 +215,8 @@ export const GlobalContextProvider = ({ children }) => {
             }) ;
             console.log('Player address: ', activeBattle);
 
-            setGameData({ pendingBattles: pendingBattles.slice(1), activeBattle })
+            setGameData({ pendingBattles: pendingBattles.slice(1), activeBattle });
+            //setUpdateGameData((prevUpdateGameData) => prevUpdateGameData + 1);
         } catch (error) {
             console.error(error);
         }
@@ -252,6 +269,7 @@ export const GlobalContextProvider = ({ children }) => {
             setBattleGround,
             player1Ref,
             player2Ref,
+            errorMessage,
             setErrorMessage
             }} >
             {children}

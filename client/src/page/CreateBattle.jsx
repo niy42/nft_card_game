@@ -14,6 +14,7 @@ const CreateBattle = () => {
     setBattleName,
     setShowAlert,
     gameData,
+    setErrorMessage,
     walletAddress,
   } = useGlobalContext();
 
@@ -32,12 +33,13 @@ console.log('This is gameData', + ' ' + gameData?.activeBattle?.battleStatus ===
         navigate(`/battle/${gameData?.activeBattle?.name}`)
       } else if (gameData?.activeBattle?.battleStatus === 0){
         setWaitBattle(true);
-        setLoading(false);
       }
            
     } catch (error) {
-      console.error(error);
+      setErrorMessage(error);
       setError(true);
+    } finally {
+      setLoading(false);
     }
   }, [gameData]);
 
@@ -66,7 +68,7 @@ console.log('This is gameData', + ' ' + gameData?.activeBattle?.battleStatus ===
         setLoading(true);
       }
     } catch (error) {
-      console.error(error);
+      setErrorMessage(error);
     } finally {
       setLoading(false);
     }

@@ -10,7 +10,7 @@ import { CustomButton } from '../components'
 
 
 const JoinBattle = () => {
-  const { contract, gameData, setShowAlert, setBattleName, walletAddress } = useGlobalContext();
+  const { contract, gameData, setShowAlert, setBattleName, walletAddress, setErrorMessage } = useGlobalContext();
   const navigate = useNavigate();
   const handleClick = async (battleName) => {
     setBattleName(battleName);
@@ -22,9 +22,9 @@ const JoinBattle = () => {
         type: 'success',
         message: `Joining ${battleName}`
       })
-      //navigate(`/battle/${battleName}`);
+      navigate(`/battle/${battleName}`);
     } catch (error) {
-      console.error(error);
+      setErrorMessage(error);
     }
   }
 

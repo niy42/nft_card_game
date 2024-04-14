@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 const Home = () => {
-  const { contract, walletAddress, setShowAlert } = useGlobalContext();
+  const { contract, walletAddress, setShowAlert, setErrorMesage } = useGlobalContext();
   const [playerName, setPlayerName] = useState('');
   const [isLoading, setIsLoading] = useState(false); // Initialize loading state
   const [loadingMessage, setLoadingMessage] = useState(''); // Initialize loading message state
@@ -28,12 +28,7 @@ const Home = () => {
         navigate('/create-battle');
       }
     } catch (error) {
-      setShowAlert({
-        status: true,
-        type: 'failure',
-        message: "Oops! something went wrong!"
-      });
-      console.log(error);
+      setErrorMesage(error);
     } finally {
       setIsLoading(false); // Set loading state to false after async operation
     }
