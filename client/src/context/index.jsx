@@ -4,7 +4,7 @@ import Web3Modal from 'web3modal';
 import { useNavigate } from 'react-router-dom';
 
 import { contractABI, contractAddress } from '../contract/index.js';
-import { createEventListeners } from './createEventListeners';
+import { createEventListeners } from './createEventListeners.js';
 import { GetParams } from '../utils/onboard';
 import { player01 } from '../assets/index.js';
 
@@ -163,6 +163,7 @@ export const GlobalContextProvider = ({ children }) => {
             player1Ref,
             player2Ref,
             setUpdateGameData,
+            updateCurrentWalletAddress
         });
     }, [contract, walletAddress, step])
 

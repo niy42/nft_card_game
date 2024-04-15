@@ -15,7 +15,7 @@ const GameLoad = () => {
       <div className={styles.gameLoadBtnBox}>
         <CustomButton 
           title='Choose Battleground'
-          onClick={() => navigate('/battleground')}
+          handleClick={() => navigate('/battleground')}
           restStyles='mt-6'
         />
 

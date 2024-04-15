@@ -28,6 +28,11 @@ const JoinBattle = () => {
     }
   }
 
+  useEffect(() => {
+    if(gameData?.activeBattle?.battleStatus === 1){
+      navigate(`/battle/${gameData.activeBattle.name}`);
+    }
+  }, [gameData])
  
   return (
     <>
@@ -47,8 +52,6 @@ const JoinBattle = () => {
               </div>
             ))
             : <p className={styles.joinLoading}>Reload the name to see new battles</p>
-            
-        
           }
           
         </div>

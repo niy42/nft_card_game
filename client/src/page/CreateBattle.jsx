@@ -23,7 +23,7 @@ const CreateBattle = () => {
   const [loadingMessage, setLoadingMessage] = useState('');
   
   const navigate = useNavigate();
-console.log('This is gameData', + ' ' + gameData?.activeBattle?.battleStatus === 0);
+console.log('Pending Battle', + ' ' + gameData?.activeBattle?.battleStatus === 0);
   useEffect(() => {
       
     try {
@@ -33,11 +33,9 @@ console.log('This is gameData', + ' ' + gameData?.activeBattle?.battleStatus ===
         navigate(`/battle/${gameData?.activeBattle?.name}`)
       } else if (gameData?.activeBattle?.battleStatus === 0){
         setWaitBattle(true);
-      }
-           
+      } 
     } catch (error) {
       setErrorMessage(error);
-      setError(true);
     } finally {
       setLoading(false);
     }
@@ -61,7 +59,9 @@ console.log('This is gameData', + ' ' + gameData?.activeBattle?.battleStatus ===
         setLoading(false);
       }
       
-      const createBattle = await contract.createBattle(battleName);
+      const createBattle = await contract.createBattle(battleName, {
+        gasLimit: 200000
+      });
       if(createBattle){
         setWaitBattle(true);
       } else {

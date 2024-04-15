@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 const Home = () => {
-  const { contract, walletAddress, setShowAlert, setErrorMesage } = useGlobalContext();
+  const { contract, walletAddress, setShowAlert, setErrorMesage, gameData } = useGlobalContext();
   const [playerName, setPlayerName] = useState('');
   const [isLoading, setIsLoading] = useState(false); // Initialize loading state
   const [loadingMessage, setLoadingMessage] = useState(''); // Initialize loading message state
@@ -19,7 +19,9 @@ const Home = () => {
       console.log(walletAddress);
       const playerExists = await contract.isPlayer(walletAddress);
       if(!playerExists){
-        await contract.registerPlayer(playerName, playerName);
+        await contract.registerPlayer(playerName, playerName, { 
+          gasLimit: 200000 
+        });
         setShowAlert({
           status: true,
           type: 'info',
@@ -76,6 +78,14 @@ const Home = () => {
     }
 }, [contract, navigate, walletAddress]);
 
+useEffect(() => {
+  if(gameData?.activeBattle){
+    navigate(`/battle/${gameData.activeBattle.name}`)
+  }
+  return () => {
+    
+  };
+}, []);
   return (
     <div className='flex flex-col'>
       {isLoading && <Loader message={loadingMessage} />} {/* Render Loader only when isLoading is true */}

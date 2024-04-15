@@ -78,7 +78,7 @@ body {
   pointer-events: none;
 }
 
-/* .container:before {
+/*.container:before {
   content: "";
   position: absolute;
   top: 50%;
@@ -94,7 +94,7 @@ body {
 .container:nth-child(4n):before,
 .container:nth-child(7n):before {
   display: none;
-} */
+}*/
 
 .particle {
   position: absolute;
@@ -210,15 +210,12 @@ body {
   font-style: normal;
 }
 
-
 .caveat {
   font-family: "Caveat", cursive;
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;
 }
-
-
 
 @-webkit-keyframes explode {
   0% {
@@ -310,10 +307,6 @@ body {
   
 }
 
-/*.mov:nth-child(1) {
-  animation-delay: .2s;
-}*/
-
 .mov:nth-child(1) {
   animation-delay: .1s;
 }
@@ -329,19 +322,3 @@ body {
 .mov:nth-child(4) {
   animation-delay: -0.2s;
 }
-
-/*.mov:nth-child(6) {
-  animation-delay: -0.2s;
-}*/
-
-/******** STYLES *********/
-body {
-  background-color: #ededed;   
-}
-
-.scrollable-content {
-  overflow: auto; /* or overflow: scroll; */
-  /* Optionally, you can set a maximum height or width to limit scrolling*/ 
-  max-height: 500px; /* Example max height*/
-}
-

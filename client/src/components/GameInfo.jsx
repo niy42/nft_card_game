@@ -16,11 +16,11 @@ const GameInfo = () => {
   const handleBattleExit = async() => {
     const battleName = gameData.activeBattle.name;
     try {
-      await contract.quitBattle(battleName);
+      await contract.quitBattle(battleName, { gasLimit: 200000});
       setShowAlert({
         status: true,
         type: 'info',
-        message:`You're quitting the ${battleName}`
+        message:`You're quitting ${battleName} battle`
       })
     } catch (error) {
       setErrorMessage(error);
@@ -68,7 +68,7 @@ const GameInfo = () => {
 
                 <CustomButton
                   title='Exit Battle'
-                  handleClick={() => handleBattleExit}
+                  handleClick={handleBattleExit}
 
                 />
           </div>
