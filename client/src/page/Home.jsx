@@ -138,8 +138,8 @@ const Home = () => {
             restStyles="mt-6"
           />
           {/* Play music button */}
-          <button onClick={handleButtonClick} className='text-white flex items-center justify-center'>
-            <AiFillPlayCircle fontSize={20} className='justify-start' /><p className='p-1'>Play Music</p>  </button>
+          <button onClick={handleButtonClick} className='text-[#cf3672] flex items-center justify-center'>
+            <AiFillPlayCircle fontSize={15} className='justify-start' /><p className='p-1 text-sm '>Play Music</p>  </button>
         </>
       )}
       {/* Include the Music component and pass the ref */}
