@@ -92,7 +92,6 @@ console.log('Pending Battle', + ' ' + gameData?.activeBattle?.battleStatus === 0
             title='Create Battle'
             handleClick={handleClick}
             restStyles='mt-6'/>
-
           </>
         )}
         <p className={styles.infoText} onClick={() => navigate('/join-battle')}>or join an existing Battle</p>
