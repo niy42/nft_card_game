@@ -11,8 +11,8 @@ contract Game {
         bool isBattle;
     }
 
-    PlayerInfo[] playersInfo;
-    address[] playersAddress;
+    PlayerInfo[] internal playersInfo;
+    address[] internal playersAddress;
 
     mapping(address => uint256) public playerAddressIndex;
     mapping(uint256 => address) public playerAddress;
@@ -45,20 +45,19 @@ contract Game {
                 isBattle: _isBattle
             })
         );
-        uint256 count = 0;
         uint256 _id = playersInfo.length;
-        playerInfo[count] = playersInfo[_id - 1];
-        count++;
+        playerInfo[_id] = playersInfo[_id - 1];
     }
 
     function retrievePlayerInfo() public view returns (PlayerInfo[] memory) {
         return playersInfo;
     }
+
     function retrievePlayersAddress() public view returns (address[] memory) {
         return playersAddress;
     }
 
-    function Loop(address _player) public view returns (bool) {
+    function loop(address _player) public view returns (bool) {
         for (uint256 i = 0; i < playersAddress.length; i++) {
             if (playersAddress[i] == _player) {
                 return true;
@@ -67,13 +66,13 @@ contract Game {
         return false;
     }
 
-    function MappingPlayerAddressIndex(
+    function mappingPlayerAddressIndex(
         address _player
     ) public view returns (bool) {
         return playerAddressIndex[_player] != 0;
     }
 
-    function MappingPlayerAddress(
+    function mappingPlayerAddress(
         uint256 _index
     ) public view returns (address) {
         return playerAddress[_index];
