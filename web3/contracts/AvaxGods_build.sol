@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
 contract Game is ERC1155 {
 
-    string baseURI;
+    string public baseURI;
 
     struct Player {
         address player;
@@ -69,48 +69,52 @@ contract Game is ERC1155 {
     function getAllPlayerToken() public view returns(PlayerToken[] memory){
         return playersToken;
     }
-
-   function isBattle(string memory _name) public view returns(bool){
+    
+    function isBattle(string memory _name) public view returns(bool){
         return battleInfo[_name] != 0;
-   }
-
-   function getBattle(string memory _name) public view returns(Battle memory) {
+    }
+    
+    // returns a specific battle
+    function getBattle(string memory _name) public view returns(Battle memory) {
         require(isBattle(_name), "Battle doesn't exist");
         return battles[battleInfo[_name]];
-   }
-
-   function getAllBattles() public view returns(Battle[] memory){
+    }
+    
+    // returns a stored battles
+    function getAllBattles() public view returns(Battle[] memory){
         return battles;
-   }
-
-   // updates an indexed battle
-   function updateBattle(
+    }
+    
+    // updates a battle stored in the array 
+    function updateBattle(
     string memory _name,
     Battle memory _newBattle) private {
         require(isBattle(_name), "Battle doesn't exist!");
         battles[battleInfo[_name]] = _newBattle;
     }
 
-   //events
-   event NewPlayer(address indexed owner, string playerName);
-   event NewBattle(string battleName, address indexed player01, address indexed player02);
-   event BattleMove(string indexed battleName, bool indexed isFirstMove);
-   event BattleEnded(string battleName, address indexed winner, address indexed loser);
-   event NewPlayerToken(
-    address indexed owner,
-    uint256 id,
-    uint256 attackStrength,
-    uint256 defenseStrength
-   );
-   event RoundEnded(address[2] indexed damagedPlayers);
+    //events
+    event NewPlayer(address indexed owner, string playerName);
+    event NewBattle(string battleName, address indexed player01, address indexed player02);
+    event BattleMove(string indexed battleName, bool indexed isFirstMove);
+    event BattleEnded(string battleName, address indexed winner, address indexed loser);
+    
+    event NewPlayerToken(
+        address indexed owner,
+        uint256 id,
+        uint256 attackStrength,
+        uint256 defenseStrength
+    );
 
-   constructor(string memory _metadataURI) ERC1155(_metadataURI) {
+    event RoundEnded(address[2] indexed damagedPlayers);
+
+    constructor(string memory _metadataURI) ERC1155(_metadataURI) {
         baseURI = _metadataURI;
         initialize();
-   }
-   
-   // function to initialize declared arrays
-   function initialize() private {
+    }
+    
+    // function to initialize declared arrays
+    function initialize() private {
         players.push(Player({
             player: address(0),
             playerName: "",
@@ -118,9 +122,11 @@ contract Game is ERC1155 {
             playerMana:  0,
             inBattle: false
         }));
+
         playersToken.push(
             PlayerToken("", 0, 0, 0)
         );
+
         battles.push(Battle({
             battleName: "",
             battleStatus: BattleStatus.PENDING,
@@ -129,7 +135,7 @@ contract Game is ERC1155 {
             battleHash: bytes32(0),
             winner: address(0)
         }));
-   }
+    }
 
    function setURI(string memory uri) public {
         _setURI(uri);
