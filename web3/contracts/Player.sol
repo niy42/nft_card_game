@@ -34,8 +34,8 @@ contract Game {
         bool _isBattle,
         address _player
     ) public {
-        PlayerInfo[] storage updatedPlayerInfo = playersInfo;
-        updatedPlayerInfo.push(
+        PlayerInfo[] storage updatedPlayersInfo = playersInfo;
+        updatedPlayersInfo.push(
             PlayerInfo({
                 player: _player,
                 playerName: _playerName,
