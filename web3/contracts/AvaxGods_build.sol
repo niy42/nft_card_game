@@ -48,8 +48,9 @@ contract Game is ERC1155, Ownable {
     mapping (string => uint256) public battleInfo;
 
     event NewPlayer(address indexed player, string playerName);
+    event PlayerToken(address indexed owner, uint256 id, uint256 attackStrength, uint256 defenseStrength);
     event NewBattle(string battleName, address indexed player01, address indexed player02);
-    event BattleMove();
+    event BattleMove(string battleName, bool isFirstMove);
     event BattleEnded(string battleName, address indexed loser, address indexed winner);
     event RoundEnded(address[2] damagedPlayers);
 
