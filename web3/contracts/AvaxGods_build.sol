@@ -2,16 +2,12 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract Game is ERC1155, Ownable {
 
 
-/**
- * Author: Obanla Adeniyi (Niy42)
- * Title: AVAXGODS build
- */
-
-contract Game is ERC1155 {
-
-    string public baseURI;
+    string internal baseURI;
 
     struct Player {
         address player;
@@ -22,20 +18,19 @@ contract Game is ERC1155 {
     }
 
     struct Battle {
-        string battleName;
         BattleStatus battleStatus;
-        bytes32 battleHash;
-        address[2] players;
+        string battleName;
         uint8[2] move;
+        address[2] players;
         address winner;
+        bytes32 battleHash;
     }
 
-    // struct to store player token
     struct PlayerToken {
-        string name; // battle card name
-        uint256 id; // randomly generated ID
-        uint256 attackStrength; // randomly generated attack strength
-        uint256 defenseStrength; // randomly generated defense strength
+        string playerName;
+        uint256 id;
+        uint256 attackStrength;
+        uint256 defenseStrength;
     }
 
     enum BattleStatus {
@@ -52,108 +47,104 @@ contract Game is ERC1155 {
     mapping (address => uint256) public playerTokenInfo;
     mapping (string => uint256) public battleInfo;
 
-    function isPlayer(address _player) public view returns(bool){
+    function isPlayer(address _player) public view returns (bool){
         return playerInfo[_player] != 0;
     }
-    
-    function getPlayer(address _player) public view returns(Player memory){
-        require(isPlayer(_player), "Player is not registered!");
-        return players[playerInfo[_player]];
 
+    function getPlayer(address _player) public view returns (Player memory){
+        require(isPlayer(_player), "Player doesn't exist");
+        return players[playerInfo[_player]];
     }
 
-    function getAllPlayers() public view returns(Player[] memory){
+    function getAllPlayers() public view returns (Player[] memory){
         return players;
     }
-    
-    function getAllPlayerToken() public view returns(PlayerToken[] memory){
-        return playersToken;
+
+    function isBattle(string memory _battleName) public view returns (bool) {
+        return battleInfo[_battleName] != 0;
     }
-    
-    function isBattle(string memory _name) public view returns(bool){
-        return battleInfo[_name] != 0;
+
+    function getBattle(string memory _battleName) public view returns (Battle memory) {
+        require(isBattle(_battleName), "Battle doesn't exist");
+        return battles[battleInfo[_battleName]];
     }
-    
-    // returns a specific battle
-    function getBattle(string memory _name) public view returns(Battle memory) {
-        require(isBattle(_name), "Battle doesn't exist");
-        return battles[battleInfo[_name]];
-    }
-    
-    // returns a stored battles
-    function getAllBattles() public view returns(Battle[] memory){
+
+    function getAllBattles() public view returns (Battle[] memory) {
         return battles;
     }
-    
-    // updates a battle stored in the array 
+
     function updateBattle(
-    string memory _name,
-    Battle memory _newBattle) private {
-        require(isBattle(_name), "Battle doesn't exist!");
-        battles[battleInfo[_name]] = _newBattle;
+        string memory _name,
+        Battle memory _newBattle) private {
+            require(isBattle(_name), "Battle doesn't exist!");
+            battles[battleInfo[_name]] = _newBattle;
     }
 
-    //events
-    event NewPlayer(address indexed owner, string playerName);
-    event NewBattle(string battleName, address indexed player01, address indexed player02);
-    event BattleMove(string indexed battleName, bool indexed isFirstMove);
-    event BattleEnded(string battleName, address indexed winner, address indexed loser);
-    
-    event NewPlayerToken(
-        address indexed owner,
-        uint256 id,
-        uint256 attackStrength,
-        uint256 defenseStrength
-    );
 
-    event RoundEnded(address[2] indexed damagedPlayers);
-
-    constructor(string memory _metadataURI) ERC1155(_metadataURI) {
+    constructor(string memory _metadataURI) ERC1155(_metadataURI) Ownable(msg.sender){
         baseURI = _metadataURI;
         initialize();
     }
     
-    // function to initialize declared arrays
+    //events
+    event NewPlayer(address indexed player, string playerName);
+    event NewBattle(string battleName, address indexed player01, address indexed player02);
+    event Battlex();
+    event BattleEnded(string battleName, address indexed loser, address indexed winner);
+    event RoundEnded(address[2] damagedPlayers);
+
+    // initializing each array with an empty Player, PlayerToken, and Battle struct
+    // makes each array length to be 1 by default
     function initialize() private {
         players.push(Player({
-            player: address(0),
             playerName: "",
-            playerHealth: 0,
-            playerMana:  0,
+            player: address(0),
+            playerHealth: 0, 
+            playerMana: 0,
             inBattle: false
         }));
-
-        playersToken.push(
-            PlayerToken("", 0, 0, 0)
-        );
-
+        playersToken.push(PlayerToken("", 0, 0, 0));
         battles.push(Battle({
             battleName: "",
             battleStatus: BattleStatus.PENDING,
-            players: [address(0), address(0)],
             move: [0, 0],
-            battleHash: bytes32(0),
-            winner: address(0)
+            players: [address(0), address(0)],
+            winner: address(0),
+            battleHash: bytes32(0)
         }));
     }
 
-   function setURI(string memory uri) public {
-        _setURI(uri);
+    function setURI(string memory newuri) internal onlyOwner {
+        _setURI(newuri);
+    }
+
+   function registerPlayer(
+    string memory _playerName,
+    string memory _playerToken
+   ) public {
+    require(!isPlayer(msg.sender), "Player exist!");
+    uint256 _id = players.length;
+    Player[] storage _p = players; //changing players array name to be used across functions
+    _p.push(Player({
+        player: msg.sender,
+        playerName: _playerName,
+        playerHealth: 35,
+        playerMana: 10,
+        inBattle: false
+    }));
+
+    playerInfo[msg.sender] = _id;
+    createRandomPlayerToken(_playerToken);
+
+    emit NewPlayer(msg.sender, _playerName);
+
    }
 
-   function registerPlayer(string memory _playerName, string memory _playerToken) public {
-        require(!isPlayer(msg.sender), "Player is registered");
-        Player[] storage _p = players; // replacement for players array to be used accross functions
-        _p.push(Player(msg.sender, _playerName, 25, 10, false)); // registering player and adding to the players array
-        uint256 _index = _p.length;
-        playerInfo[msg.sender] = _index;
+    function createRandomPlayerToken(string memory _playerToken) internal {
+        //
+    }
 
-        createRandomPlayerToken(_playerToken);
-        emit NewPlayer(msg.sender, _playerName);
-   }
-   
-
-   function createRandomPlayerToken(string memory _playerToken) internal {
-    //
-   }
+    function returnPlayersArrayLength() public view returns (uint256) {
+        return players.length; // initial length is 1 due to initialized Player's struct
+    }
 }
