@@ -53,6 +53,11 @@ contract Game is ERC1155, Ownable {
     event BattleEnded(string battleName, address indexed loser, address indexed winner);
     event RoundEnded(address[2] damagedPlayers);
 
+    constructor(string memory metadataURI) ERC1155(metadataURI) Ownable(msg.sender){
+        baseURI = metadataURI;
+        initialize();
+    }
+    
     function updateBattle(string memory _name, Battle memory _newBattle) public {
         require(isBattle(_name), "Battle doesn't exist!");
         battles[battleInfo[_name]] = _newBattle;
