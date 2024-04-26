@@ -4,8 +4,8 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Game is ERC1155, Ownable {
 
+contract Game is ERC1155, Ownable {
 
     string internal baseURI;
 
@@ -47,10 +47,37 @@ contract Game is ERC1155, Ownable {
     mapping (address => uint256) public playerTokenInfo;
     mapping (string => uint256) public battleInfo;
 
+    event NewPlayer(address indexed player, string playerName);
+    event NewBattle(string battleName, address indexed player01, address indexed player02);
+    event BattleMove();
+    event BattleEnded(string battleName, address indexed loser, address indexed winner);
+    event RoundEnded(address[2] damagedPlayers);
+
+    function updateBattle(string memory _name, Battle memory _newBattle) public {
+        require(isBattle(_name), "Battle doesn't exist!");
+        battles[battleInfo[_name]] = _newBattle;
+    }
+
+    function registerPlayer (string memory _playerName, string memory _playerToken) public {
+        require(!isPlayer(msg.sender), "Player exist!");
+        uint256 _id = players.length;
+        Player[] storage _p = players; //changing players array name to be used across functions
+        _p.push(Player({
+            player: msg.sender,
+            playerName: _playerName,
+            playerHealth: 35,
+            playerMana: 10,
+            inBattle: false
+        }));
+        playerInfo[msg.sender] = _id;
+        createRandomPlayerToken(_playerToken);
+        emit NewPlayer(msg.sender, _playerName);
+    }
+
     function isPlayer(address _player) public view returns (bool){
         return playerInfo[_player] != 0;
     }
-
+    
     function getPlayer(address _player) public view returns (Player memory){
         require(isPlayer(_player), "Player doesn't exist");
         return players[playerInfo[_player]];
@@ -73,29 +100,13 @@ contract Game is ERC1155, Ownable {
         return battles;
     }
 
-    function updateBattle(
-        string memory _name,
-        Battle memory _newBattle) private {
-            require(isBattle(_name), "Battle doesn't exist!");
-            battles[battleInfo[_name]] = _newBattle;
-    }
-
-
-    constructor(string memory _metadataURI) ERC1155(_metadataURI) Ownable(msg.sender){
-        baseURI = _metadataURI;
-        initialize();
+    function returnPlayersArrayLength() public view returns (uint256) {
+        return players.length; // initial length is 1 due to initialized Player's struct
     }
     
-    //events
-    event NewPlayer(address indexed player, string playerName);
-    event NewBattle(string battleName, address indexed player01, address indexed player02);
-    event Battlex();
-    event BattleEnded(string battleName, address indexed loser, address indexed winner);
-    event RoundEnded(address[2] damagedPlayers);
-
     // initializing each array with an empty Player, PlayerToken, and Battle struct
     // makes each array length to be 1 by default
-    function initialize() private {
+    function initialize() internal {
         players.push(Player({
             playerName: "",
             player: address(0),
@@ -113,38 +124,14 @@ contract Game is ERC1155, Ownable {
             battleHash: bytes32(0)
         }));
     }
-
+    
     function setURI(string memory newuri) internal onlyOwner {
         _setURI(newuri);
     }
-
-   function registerPlayer(
-    string memory _playerName,
-    string memory _playerToken
-   ) public {
-    require(!isPlayer(msg.sender), "Player exist!");
-    uint256 _id = players.length;
-    Player[] storage _p = players; //changing players array name to be used across functions
-    _p.push(Player({
-        player: msg.sender,
-        playerName: _playerName,
-        playerHealth: 35,
-        playerMana: 10,
-        inBattle: false
-    }));
-
-    playerInfo[msg.sender] = _id;
-    createRandomPlayerToken(_playerToken);
-
-    emit NewPlayer(msg.sender, _playerName);
-
-   }
-
+    
     function createRandomPlayerToken(string memory _playerToken) internal {
         //
     }
 
-    function returnPlayersArrayLength() public view returns (uint256) {
-        return players.length; // initial length is 1 due to initialized Player's struct
-    }
+    
 }
