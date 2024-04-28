@@ -219,7 +219,7 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
     }
 
     function _getPlayerName(address _player) internal returns (string memory) {
-        // address to Player mapping
+        // address to player struct mapping
         _playerInfo[_player] = Player({
             playerName: players[playerInfo[_player]].playerName,
             playerHealth: players[playerInfo[_player]].playerHealth,
@@ -406,7 +406,6 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
                     _p2healthAfterAttack = p2.health;
                 } else {
                     _p2healthAfterAttack = (p2.health + p2.defense) - p1.attack;
-                    _damagedPlayers[0] = _battle.players[1]; // player 2 damaged
                 }
 
                 players[p1.index].playerMana -= 3;
@@ -421,7 +420,6 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
                     _p1healthAfterAttack = p1.health;
                 } else {
                     _p1healthAfterAttack = (p1.defense + p1.health) - p1.attack;
-                    _damagedPlayers[0] = _battle.players[0]; // player 1 damaged
                 }
 
                 players[p1.index].playerMana += 3;
@@ -430,20 +428,24 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
         } else if (p1.move == 2 && p2.move == 2) {} else {}
     }
 
-    /*struct Px {
+    struct Px {
         uint256 health;
         uint256 mana;
         uint8 move;
         uint256 index;
         uint256 attack;
         uint256 defense;
-    }*/
+    }
 
     function _endBattle() internal {}
 
     /*function _resolveBattlex(string memory _name) internal {
         Battle memory _battle = getBattle(_name);
-        require(_battle.players[0] == msg.sender || msg.sender == _battle.players[1], "You're not in this battle!");
+        require(
+            _battle.players[0] == msg.sender ||
+                msg.sender == _battle.players[1],
+            "You're not in this battle!"
+        );
 
         Px memory p1 = Px({
             index: playerInfo[_battle.players[0]],
@@ -452,7 +454,7 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
             attack: getPlayerToken(_battle.players[0]).attackStrength,
             defense: getPlayerToken(_battle.players[0]).defenseStrength,
             move: getBattle(_name).move[0]
-        }); 
+        });
 
         Px memory p2 = Px({
             index: playerInfo[_battle.players[1]],
@@ -465,10 +467,10 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
 
         address[2] memory _damagedPlayers = [address(0), address(0)];
 
-        if(p1.move == 1 && p2.move == 1) {
-            if(p1.attack >= p2.health){
+        if (p1.move == 1 && p2.move == 1) {
+            if (p1.attack >= p2.health) {
                 _endBattle();
-            } else if(p2.attack >= p1.health){
+            } else if (p2.attack >= p1.health) {
                 _endBattle();
             } else {
                 players[p1.index].playerHealth -= p2.attack;
@@ -478,7 +480,8 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
                 players[p2.index].playerMana -= 3;
 
                 _damagedPlayers = _battle.players;
-            }   
+            }
+
             //
         }
     }*/
