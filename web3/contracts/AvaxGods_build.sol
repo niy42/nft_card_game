@@ -5,6 +5,11 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 
+/**
+ * @author: Obanla Adeniyi (niy42)
+ * @title: AvaxGods
+ */
+
 contract Game is ERC1155, ERC1155Supply, Ownable {
     string internal baseURI; // stores ERC1155 metadata
     uint256 private immutable MAX_ATTACK_DEFEND_STRENGTH = 10;
