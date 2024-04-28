@@ -6,8 +6,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 
 /**
- * @author: Obanla Adeniyi (niy42)
- * @title: AvaxGods
+ * @author Obanla Adeniyi (niy42)
+ * @title AvaxGods
  */
 
 contract Game is ERC1155, ERC1155Supply, Ownable {
@@ -386,9 +386,9 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
 
         if (p1.move == 1 && p2.move == 1) {
             if (p1.attack >= p2.health) {
-                //endBattle();
+                _endBattle();
             } else if (p1.health <= p2.attack) {
-                //endBattle();
+                _endBattle();
             } else {
                 players[p1.index].playerHealth -= p2.attack;
                 players[p2.index].playerHealth -= p1.attack;
@@ -412,6 +412,8 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
                 } else {
                     _p2healthAfterAttack = (p2.health + p2.defense) - p1.attack;
                     _damagedPlayers[0] = _battle.players[1]; // player 2 damaged
+
+                    players[p2.index].playerHealth = _p2healthAfterAttack;
                 }
 
                 players[p1.index].playerMana -= 3;
@@ -427,12 +429,17 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
                 } else {
                     _p1healthAfterAttack = (p1.defense + p1.health) - p1.attack;
                     _damagedPlayers[0] = _battle.players[0]; // player 1 damaged
+
+                    players[p1.index].playerHealth = _p1healthAfterAttack;
                 }
 
                 players[p1.index].playerMana += 3;
                 players[p2.index].playerMana -= 3;
             }
-        } else if (p1.move == 2 && p2.move == 2) {} else {}
+        } else if (p1.move == 2 && p2.move == 2) {
+            players[p1.index].playerMana += 3;
+            players[p2.index].playerMana += 3;
+        }
     }
 
     /*struct Px {
@@ -483,8 +490,10 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
                 players[p2.index].playerMana -= 3;
 
                 _damagedPlayers = _battle.players;
-            }   
+            }
+
             //
+
         }
     }*/
 
