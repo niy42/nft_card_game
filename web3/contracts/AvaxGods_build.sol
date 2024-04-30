@@ -8,10 +8,11 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 /**
  * @author Obanla Adeniyi (niy42)
  * @title AvaxGods
+ * @notice This contract manages the tokens and battle logic for the AvaxGods game.
  */
 
-contract Game is ERC1155, ERC1155Supply, Ownable {
-    string internal baseURI; // stores ERC1155 metadata
+contract AvaxGods_build is ERC1155, ERC1155Supply, Ownable {
+    string internal baseURI; // URI for ERC1155 metadata
     uint256 private immutable MAX_ATTACK_DEFEND_STRENGTH = 10;
     uint256 internal totalTokenMinted; //total tokenminted
 
@@ -104,7 +105,10 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
         string memory _playerToken
     ) public returns (PlayerToken memory) {
         //
-        uint256 randAttack = _createRandomNumber(MAX_ATTACK_DEFEND_STRENGTH);
+        uint256 randAttack = _createRandomNumber(
+            MAX_ATTACK_DEFEND_STRENGTH,
+            msg.sender
+        );
         uint256 randDefend = MAX_ATTACK_DEFEND_STRENGTH - randAttack;
 
         uint8 randId = uint8(
@@ -165,10 +169,11 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
         require(!getPlayer(msg.sender).inBattle, "You are in another battle!");
         require(
             _battle.battleStatus == BattleStatus.PENDING &&
-                _battle.players[0] != msg.sender
+                _battle.players[0] != msg.sender,
+            ""
         );
 
-        _battle.battleStatus == BattleStatus.STARTED;
+        _battle.battleStatus = BattleStatus.STARTED;
         _battle.players[1] = msg.sender;
         updateBattle(_name, _battle);
 
@@ -242,11 +247,12 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
     }
 
     function _createRandomNumber(
-        uint256 _max
+        uint256 _max,
+        address _player
     ) internal view returns (uint256 randNum) {
         //generates a random number
         randNum =
-            uint256(keccak256(abi.encodePacked(msg.sender, block.number))) %
+            uint256(keccak256(abi.encodePacked(_player, block.number))) %
             100;
         randNum %= _max;
 
@@ -386,9 +392,9 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
 
         if (p1.move == 1 && p2.move == 1) {
             if (p1.attack >= p2.health) {
-                _endBattle();
+                _endBattle(_battle.players[0], _battle);
             } else if (p1.health <= p2.attack) {
-                _endBattle();
+                _endBattle(_battle.players[1], _battle);
             } else {
                 players[p1.index].playerHealth -= p2.attack;
                 players[p2.index].playerHealth -= p1.attack;
@@ -404,7 +410,7 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
             }
         } else if (p1.move == 1 && p2.move == 2) {
             if (p1.attack >= (p2.defense + p2.health)) {
-                _endBattle();
+                _endBattle(_battle.players[1], _battle);
             } else {
                 uint256 _p2healthAfterAttack;
                 if (p2.defense > p1.attack) {
@@ -421,7 +427,7 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
             }
         } else if (p1.move == 2 && p2.move == 1) {
             if ((p1.defense + p1.health) <= p2.attack) {
-                _endBattle();
+                _endBattle(_battle.players[0], _battle);
             } else {
                 uint256 _p1healthAfterAttack;
                 if (p1.defense > p2.attack) {
@@ -440,9 +446,116 @@ contract Game is ERC1155, ERC1155Supply, Ownable {
             players[p1.index].playerMana += 3;
             players[p2.index].playerMana += 3;
         }
+
+        // emit RoundEnded
+        emit RoundEnded(_damagedPlayers);
+
+        // reset player move
+        _battle.move[0] = 0;
+        _battle.move[1] = 0;
+
+        // update finished battle
+        updateBattle(_battle.battleName, _battle);
+
+        // update player 1 attack and defense strength
+        playersToken[playerTokenInfo[_battle.players[0]]]
+            .attackStrength = _createRandomNumber(
+            MAX_ATTACK_DEFEND_STRENGTH,
+            _battle.players[0]
+        );
+        playersToken[playerTokenInfo[_battle.players[0]]].defenseStrength =
+            MAX_ATTACK_DEFEND_STRENGTH -
+            playersToken[playerTokenInfo[_battle.players[0]]].attackStrength;
+
+        // update player 2 attack and defense strength
+        playersToken[playerTokenInfo[_battle.players[1]]]
+            .attackStrength = _createRandomNumber(
+            MAX_ATTACK_DEFEND_STRENGTH,
+            _battle.players[1]
+        );
+        playersToken[playerTokenInfo[_battle.players[1]]].defenseStrength =
+            MAX_ATTACK_DEFEND_STRENGTH -
+            playersToken[playerTokenInfo[_battle.players[1]]].attackStrength;
     }
 
-    function _endBattle() internal {}
+    function quitBattle(string memory _name) public {
+        Battle memory _battle = getBattle(_name);
+        require(
+            _battle.players[0] == msg.sender ||
+                _battle.players[1] == msg.sender,
+            "You are not in this battle!"
+        );
+
+        _battle.players[0] == msg.sender
+            ? _endBattle(_battle.players[1], _battle)
+            : _endBattle(_battle.players[0], _battle);
+    }
+
+    /*struct Px {
+        uint256 health;
+        uint256 mana;
+        uint8 move;
+        uint256 index;
+        uint256 attack;
+        uint256 defense;
+    }*/
+
+    function _endBattle(address _player, Battle memory _battle) internal {
+        require(_battle.battleStatus != BattleStatus.END, "Battle has ended!");
+
+        _battle.winner = _player;
+        address _battleLoser = _player == _battle.players[0]
+            ? _battle.players[1]
+            : _battle.players[0];
+        updateBattle(_battle.battleName, _battle);
+
+        Player memory p1 = getPlayer(
+            battles[battleInfo[_battle.battleName]].players[0]
+        );
+        p1.playerHealth = 35;
+        p1.playerMana = 25;
+        p1.inBattle = false;
+
+        Player memory p2 = getPlayer(_battle.players[1]);
+        p2.playerHealth = 35;
+        p2.playerMana = 25;
+        p2.inBattle = false;
+
+        emit BattleEnded(_battle.battleName, _player, _battleLoser);
+    }
+
+    function tokenMetadata(uint256 _int) public view returns (string memory) {
+        return
+            string(
+                abi.encodePacked(baseURI, "/", _uintToString(_int), ".json")
+            );
+    }
+    // function to convert integer to a string in Solidity
+    // bytes is dynamic byte array used in performing low-level operations
+    /// @param _int: number to be passed
+    function _uintToString(uint _int) public pure returns (bytes memory) {
+        if (_int == 0) {
+            return "0";
+        }
+
+        uint256 len;
+        if (_int != 0) {
+            len++;
+            _int / 10;
+        }
+
+        bytes memory bstr = new bytes(len);
+        uint256 k = len;
+        if (_int != 0) {
+            k -= 1;
+            uint8 temp = uint8(48 + (_int - (_int / 10) * 10));
+            bytes1 b1 = bytes1(temp);
+            bstr[k] = b1;
+            _int / 10;
+        }
+
+        return bstr;
+    }
 
     function _update(
         address from,

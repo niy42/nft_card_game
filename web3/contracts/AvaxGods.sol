@@ -35,7 +35,7 @@ contract AVAXGods is ERC1155, Ownable(msg.sender), ERC1155Supply {
         address,
         uint256[] memory ids,
         uint256[] memory values
-    ) internal override(ERC1155, ERC1155Supply) {
+    ) internal pure override(ERC1155, ERC1155Supply) {
         // Add your custom implementation here or choose one of the base contract implementations
         if (ids.length != values.length) {
             revert ERC1155InvalidArrayLength(ids.length, values.length);
